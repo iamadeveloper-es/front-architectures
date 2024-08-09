@@ -1,5 +1,4 @@
 import { Product } from "../../domain/models/Product";
-import { products } from "../http/api/products";
 import { ProductRepositoryPort } from "../ports/ProductRepositoryPort";
 
 
@@ -7,17 +6,14 @@ import { ProductRepositoryPort } from "../ports/ProductRepositoryPort";
 export class ProductAdapter implements ProductRepositoryPort {
     private products: Product[] = [];
 
-    async load(){
-        try {
-            const response: Product[] = await products()
-            return response.map(item => this.products.push(item))
-        }
-        catch(e){
+    add(product: Product): void {
+        const productExist = this.products.some(item => item.id === +product.id)
+        if(productExist){
             debugger
         }
-    }
-    add(product: Product): void {
-        this.products.push(product)
+        else{
+          this.products.push(product)
+        }
     }
     getAll(): Product[] {
         return this.products

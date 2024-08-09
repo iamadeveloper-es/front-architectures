@@ -1,11 +1,5 @@
 import { ProductService } from "./infraestructure/services/Product.service"
 
-
-
-
-
-
-
 (async () => {
     
     const productService = new ProductService()
@@ -26,7 +20,4 @@ import { ProductService } from "./infraestructure/services/Product.service"
         productList?.appendChild(li)
     })
     
-    // productList.innerHTML = products[0].title
-
-    console.log({products})
 })()

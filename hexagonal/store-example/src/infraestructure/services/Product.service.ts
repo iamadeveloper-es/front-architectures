@@ -17,19 +17,8 @@ export class ProductService {
         this.productRepository = new ProductAdapter()
     }
 
-    // addProduct(productData: Product): void{
-    //     this.productRepository.add(user)
-    // }
-
-    async loadProducts(): Promise<void> {
-        try {
-            const response = await this.productRepository.load()
-            this.getAllProducts()
-
-        }
-        catch(e){
-            debugger
-        }
+    addProduct(productData: Product): void{
+        this.productRepository.add(productData)
     }
 
     getSingleProduct(id: number): Product | null{
@@ -37,12 +26,17 @@ export class ProductService {
     }
 
     async getAllProducts(): Promise<Product[]> {
+        let products
+        if(this.productRepository.getAll().length === 0){
+            const httpClient = new HttpClient()
+            const productApiServices = new ProductHttpServices(httpClient)
 
-        const httpClient = new HttpClient()
-        const productApiServices = new ProductHttpServices(httpClient)
+            const response = await productApiServices.getProducts()
+            response.map((product: Product) => this.productRepository.add(product))
 
-        const products = await productApiServices.getProducts()
-        
+        }
+
+        products = this.productRepository.getAll()
         return products
 
     }
